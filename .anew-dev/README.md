@@ -43,8 +43,10 @@ burada da aynen geçerlidir.
 
 - Dil: chat=tr · docs=tr — `.anew-dev/` kayıtları (spec, plan, review, backlog girdileri) Türkçe;
   protokol alanları (`Status:`, `Approved by / on:`, `Source:`, şablon başlıkları) İngilizce.
-  Şablonun kendi dosyaları (core: `docs/`, `workflows/`, `prompts/`, `scripts/`, `AGENTS.md`)
-  ekiplere dağıtıldığı için mevcut dilinde (İngilizce) kalır.
+  Şablonun kendi dosyaları (core: `docs/`, `workflows/`, `prompts/`, `AGENTS.md` vb.) **Türkçe
+  olacak** (karar 2026-11-12, Selin Öztürk). Bu bir şablon değişikliğidir: kendi `.anew-dev`
+  spec'iyle yapılır (önerilen ilk iş, 0006); o ship edilene kadar core İngilizce kalır. Protokol
+  alanları ve `scripts/doctor`'un okuduğu başlıklar/değerler İngilizce kalır.
 - Mod: **lite** (2026-11-12, Selin Öztürk) — spec onayı hızlı evet/hayır, plan onayı insanda;
   review bağımsız subagent ya da ayrı oturumda (temiz review VERIFY'ı taşıyabilir —
   `workflows/segments.md`, "The chainer"); triage ve ship insanda. `/new-feature` burada
