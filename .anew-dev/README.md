@@ -31,3 +31,22 @@ AGENTS.md invariant rules) but live here so the template's `specs/` stays empty 
   by hand): no fix reaches the line that `main` does not already hold.
 
 Template users: this folder is not part of your workspace — delete it after you create your repo.
+
+## Bu çalışma kopyası — şirket içi ANEW iyileştirmesi
+
+Karar (R-10, 2026-11-12, Selin Öztürk): bu repo ANEW yaşam döngüsünün kendisini iyileştirir;
+ekipler iyileştirilmiş şablonu şirket içi yazılımlarında kullanır. Bu yüzden **bootstrap burada
+uygulanmaz**: `AGENTS.md`, `docs/`, `specs/` ve `scripts/check.conf` kullanıcılar için şablon
+olarak kalır. İyileştirmeler yukarıdaki kurallarla `.anew-dev/` altında yürür (spec numarası
+`done/` ve `plans/` içindeki en yüksek numara + 1; sıradaki 0006). AGENTS.md değişmez kuralları
+burada da aynen geçerlidir.
+
+- Dil: chat=tr · docs=tr — `.anew-dev/` kayıtları (spec, plan, review, backlog girdileri) Türkçe;
+  protokol alanları (`Status:`, `Approved by / on:`, `Source:`, şablon başlıkları) İngilizce.
+  Şablonun kendi dosyaları (core: `docs/`, `workflows/`, `prompts/`, `scripts/`, `AGENTS.md`)
+  ekiplere dağıtıldığı için mevcut dilinde (İngilizce) kalır.
+- Mod: _bekliyor_
+- Onay sahipleri: _bekliyor_
+- Önemsiz (trivial) değişiklik politikası: _bekliyor_
+- Doğrulama: _bekliyor_
+- Uzak repo / CI ve birleştirme: _bekliyor_
