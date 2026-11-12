@@ -3,6 +3,7 @@
 - Status: Accepted
 - Date: 2026-10-07
 - Revised: 2026-10-19 — moved to docs/decisions/anew/ as ANEW-0008 (template namespace, ANEW-0010); decision unchanged
+- Revised: 2026-11-12 — extended by ANEW-0013 (UI work is drawn in ANALYZE and approved with the spec); this decision unchanged
 
 ## Context
 ANEW has software design (`docs/architecture.md`, the plan, ADRs) but no place for user experience.
