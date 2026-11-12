@@ -45,8 +45,30 @@ burada da aynen geçerlidir.
   protokol alanları (`Status:`, `Approved by / on:`, `Source:`, şablon başlıkları) İngilizce.
   Şablonun kendi dosyaları (core: `docs/`, `workflows/`, `prompts/`, `scripts/`, `AGENTS.md`)
   ekiplere dağıtıldığı için mevcut dilinde (İngilizce) kalır.
-- Mod: _bekliyor_
-- Onay sahipleri: _bekliyor_
-- Önemsiz (trivial) değişiklik politikası: _bekliyor_
-- Doğrulama: _bekliyor_
-- Uzak repo / CI ve birleştirme: _bekliyor_
+- Mod: **lite** (2026-11-12, Selin Öztürk) — spec onayı hızlı evet/hayır, plan onayı insanda;
+  review bağımsız subagent ya da ayrı oturumda (temiz review VERIFY'ı taşıyabilir —
+  `workflows/segments.md`, "The chainer"); triage ve ship insanda. `/new-feature` burada
+  çalışmaz (AGENTS.md `Mode: unset` kalır; segment giriş kontrolleri `specs/`'e bakar): adımlar
+  `.anew-dev/` üzerinde elle izlenir.
+- Onay sahibi: **Selin Öztürk** (2026-11-12) — spec onayı, plan onayı, triage ve ship kapılarının
+  tek insan onaylayanı. Onay hafif: kapıda "onay"/"evet" yeterli; ajan kayıt satırını
+  (`Approved by / on: Selin Öztürk, <YYYY-MM-DD>` vb.) yazar. Ajan hiçbir kapıyı kendisi geçemez;
+  bağımsız review/QA read-only `reviewer` subagent'ı ya da ayrı oturumdur (kural 3).
+- Önemsiz (trivial) değişiklik politikası: **(1) PR + bir review, spec yok** (2026-11-12, Selin
+  Öztürk) — `workflows/change-request.md` triage'ı TRIVIAL dediğinde (kriter değişmez, paylaşılan
+  koda dokunulmaz): tek dar commit, `trivial/<kısa-ad>` dalı, review read-only `reviewer`
+  subagent'ı, merge Selin Öztürk. Script davranışı ya da prompt anlamı değişiyorsa trivial
+  değildir → `.anew-dev` spec'i.
+- Doğrulama (2026-11-12, Selin Öztürk): `scripts/check.conf` yazılmaz (şablona girer).
+  **Tam yeşil** = dalın HEAD'inde GitHub Actions `check` iş akışı başarılı (`doctor --strict` +
+  `selftest`); kanıt planın `## Build evidence` bölümüne çalışma bağlantısı + SHA olarak yazılır.
+  **İç döngü** = yerel `./scripts/doctor`, script değişince `./scripts/selftest`. Ortam (R-13):
+  bu Windows makinesi selftest'i çalıştırabiliyor ama yavaş (>10 dk, 281/281 ok; CI ~1 dk) —
+  tam profil kanıtı CI'dan gelir. Residue: `check.conf` adımı olmadığından RESIDUE NOT MEASURED;
+  `scripts/check`/`scripts/residue` değiştiren iş bunu kendi VERIFY'ında selftest ile kanıtlar.
+- Uzak repo / CI ve birleştirme (2026-11-12, Selin Öztürk): `origin` =
+  `github.com/selinozturkkaya/anewworkflowimprovement`; CI = `.github/workflows/check.yml` (her
+  push/PR). Her dal PR ile `main`'e **squash-merge**; merge öncesi CI yeşil, merge'ü Selin Öztürk
+  yapar. `main` koruması (GitHub ayarı, Selin Öztürk yapar): PR zorunlu + `doctor` ve `check`
+  status check'leri zorunlu; "Require approvals" kapalı (tek onaylayan). `gh` CLI isteğe bağlı —
+  yoksa PR tarayıcıdan açılır.
