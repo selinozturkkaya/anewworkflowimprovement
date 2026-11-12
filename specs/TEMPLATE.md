@@ -26,8 +26,11 @@ what is deliberately NOT being done. Decisions from clarifying questions are fol
      not visual polish:
      - Flow: the steps a user takes, entry point → outcome.
      - States: every state of each screen — empty, loading, error, success, no permission.
-     - Design reference: a link to the design (file / frame / version), never a copy in the repo
-       (docs/testing.md, Evidence policy). No design → "none — the flow above is the design".
+     - Design artifact (ANEW-0013): one line `- Design artifact: <http(s) address> (version <id>)`
+       — every screen the criteria touch, in every state below, labelled AC-n; an approved
+       existing design is linked, otherwise the Analyst draws it. Approved together with the
+       spec; never a copy in the repo (docs/testing.md, Evidence policy). doctor checks the line
+       past approval.
      - Accessibility: keyboard path, labels, contrast expectations.
      Every state listed here gets an acceptance criterion below. -->
 

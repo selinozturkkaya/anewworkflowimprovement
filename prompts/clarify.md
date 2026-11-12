@@ -8,7 +8,8 @@ There is NO spec yet; we clarify intent first. Produce:
    like; what is deliberately NOT being done.
 2) CLARIFY questions: only questions whose answers are REQUIRED before a spec can be written
    (boundaries, empty/error cases, access, volumes, performance expectations; for UI work: the
-   user's flow, the screen states, whether a design exists). At most ~7, ordered by impact; the
+   user's flow, the screen states, whether an approved design exists — if not, the spec will
+   carry a design artifact you draw, ANEW-0013). At most ~7, ordered by impact; the
    rest wait for the spec's self-critique pass. For each question
    add your own recommendation and rationale — I decide.
 

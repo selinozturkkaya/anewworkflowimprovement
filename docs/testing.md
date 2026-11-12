@@ -73,7 +73,9 @@ human's visual sign-off.
    external system), and the table says so.
 
 A screenshot proves a criterion only against the spec's "User experience": every state it lists
-(empty, loading, error, success, no permission), compared with the linked design if there is one.
+(empty, loading, error, success, no permission), compared with the drawing that carries the same
+criterion label in the spec's design artifact (ANEW-0013). The artifact's live version must be the
+one the spec names; a different version is a spec change (R-08), not evidence.
 
 ## Evidence policy
 1. **Evidence is referenced, not stored.** Each acceptance criterion's evidence is a pointer: the

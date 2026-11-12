@@ -66,7 +66,8 @@ Mode is the `Mode:` line in `AGENTS.md`, set at bootstrap (`workflows/README.md`
 - **What it does:** workspace health — required core files, recovery catalog, configuration
   (`AGENTS.md`, mode, language, `scripts/check.conf`), the ANEW base version (`.anew-version`),
   adapter presence and parity, this page's coverage, spec/plan gate consistency, twin and shipped specs, `specs/done/` immutability,
-  evidence hygiene, fast-only evidence, criterion-map names no file holds (WARN). `--strict` turns gate warnings into failures; CI runs it that way.
+  evidence hygiene, fast-only evidence, criterion-map names no file holds (WARN), the design artifact
+  field of Approved / In progress UI specs (gate, ANEW-0013). `--strict` turns gate warnings into failures; CI runs it that way.
   Step prerequisites (`requires` lines in `check.conf`): runs each distinct command once and
   prints, per profile, `runnable on this machine` or `not runnable on this machine (steps: …)`
   — a WARN in every mode, also under `--strict`: it describes the machine (R-13). A malformed
