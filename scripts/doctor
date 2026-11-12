@@ -331,6 +331,54 @@ for s in "$ROOT/specs/active/"[0-9]*.md; do
     *) warn "self-critique $sc: specs/active/$(basename "$s")" ;;
   esac
 done
+
+# --- design artifact (ANEW-0013): an Approved / In progress spec with a user interface names the
+# approved design as `- Design artifact: <http(s) address> (version <id>)`; a mini-spec's
+# `- Design:` uses the same form when filled. gate() = WARN locally, FAIL under --strict.
+# No UI = the first non-comment line under "## User experience" starts with
+# "none — no user interface". Draft, specs/done/ and specs without that heading (older template)
+# are not checked. Only this one field is parsed — never free text. ---
+da_checked=0
+da_first() { awk '
+  { sub(/\r$/, "") }
+  /^## User experience/ { inux = 1; next }
+  inux && /^## / { exit }
+  inux {
+    line = $0
+    if (incom) { j = index(line, "-->"); if (!j) next; line = substr(line, j + 3); incom = 0 }
+    while ((i = index(line, "<!--")) > 0) {
+      rest = substr(line, i + 4); j = index(rest, "-->")
+      if (j) line = substr(line, 1, i - 1) substr(rest, j + 3)
+      else { line = substr(line, 1, i - 1); incom = 1 }
+    }
+    gsub(/^[ \t]+|[ \t]+$/, "", line)
+    if (line != "") { print line; exit }
+  }
+  END { if (!inux) exit 2 }' "$1"; }
+da_field() { grep -m1 "^- $1:" "$2" | tr -d '\r' | sed "s/<!--.*-->//g; s/^- $1:[[:space:]]*//; s/[[:space:]]*\$//"; }
+for s in "$ROOT/specs/active/"[0-9]*.md; do
+  [ -f "$s" ] || continue
+  st=$(grep -m1 '^- Status:' "$s" | tr -d '\r' | sed 's/<!--.*-->//g; s/^- Status:[[:space:]]*//; s/[[:space:]]*$//')
+  case "$st" in Approved|"In progress") ;; *) continue ;; esac
+  rel="specs/active/$(basename "$s")"
+  if grep -q '^## Preserved behavior' "$s"; then
+    v=$(da_field Design "$s")
+    [ -n "$v" ] || continue
+  else
+    first=$(da_first "$s") || continue
+    case "$first" in "none — no user interface"*) continue ;; esac
+    v=$(da_field "Design artifact" "$s")
+    if [ -z "$v" ]; then
+      da_checked=$((da_checked + 1))
+      gate "UI spec has no design artifact: $rel (- Design artifact: <address> (version <id>), ANEW-0013)"
+      continue
+    fi
+  fi
+  da_checked=$((da_checked + 1))
+  printf '%s\n' "$v" | grep -Eq '^https?://[^ ]+ \(version [^ )]+\)$' \
+    || gate "design artifact not a fixed version (<http(s) address> (version <id>)): $rel — '$v'"
+done
+[ "$da_checked" -gt 0 ] && ok "design artifacts checked ($da_checked)"
 dupsrc=$(for s in "$ROOT/specs/active/"[0-9]*.md; do
   [ -f "$s" ] && grep -m1 '^- Source:' "$s" | sed 's/<!--.*-->//g; s/^- Source:[[:space:]]*//; s/[[:space:]]*$//'
 done | grep -v '^$' | sort | uniq -d)

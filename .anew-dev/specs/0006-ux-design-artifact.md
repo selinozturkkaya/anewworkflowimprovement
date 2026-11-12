@@ -1,6 +1,6 @@
 # Spec 0006 — UI işlerinde ANALYZE tasarım artifact'ı üretir
 
-- Status: Approved
+- Status: In progress
 - Mode: lite (ANEW's own development)
 - Plan: `.anew-dev/plans/0006-plan.md`
 - Self-critique: done (G-1…G-6 folded in — Selin Öztürk, 2026-11-12)

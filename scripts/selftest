@@ -405,6 +405,39 @@ doctor;            hasnt "self-critique" "self-critique done → no line"
 put specs/active/0030-sc.md '# Spec 0030' '- Status: Approved'
 doctor;            hasnt "self-critique" "no Self-critique field (older spec) → no line"
 
+# Design artifact (ANEW-0013): an Approved / In progress spec with a user interface carries
+# `- Design artifact: <http(s) address> (version <id>)`; gate = WARN locally, FAIL under --strict.
+ux() { f=$1; st=$2; shift 2; put "$f" '# Spec 0050' "- Status: $st" '' '## User experience' \
+  '<!-- Required heading; the behavior' '     as the user sees it -->' "$@" '' '## Acceptance criteria' '- [ ] AC-1 — x'; }
+reset; ux specs/active/0050-ui.md Approved '- Flow: list → detail'
+doctor;            has "WARN  UI spec has no design artifact: specs/active/0050-ui.md" "UI spec without a design artifact → WARN"
+doctor --strict;   exits 1 "UI spec without a design artifact under --strict"
+has "FAIL  UI spec has no design artifact: specs/active/0050-ui.md" "… is a gate"
+ux specs/active/0050-ui.md "In progress" '- Flow: list → detail'
+doctor;            has "UI spec has no design artifact: specs/active/0050-ui.md" "… In progress too"
+ux specs/active/0050-ui.md Approved '- Flow: list → detail' '- Design artifact: https://claude.ai/artifact/abc123 (version v7)  '
+doctor;            hasnt "UI spec has no design artifact" "a fixed-version design artifact → no gate"
+hasnt "not a fixed version" "… and no format line";  has "ok    design artifacts checked (1)" "checked specs are counted"
+for bad in 'docs/design/list.png (version 1)' 'none — the flow is the design' 'https://example.com/d' \
+           'https://example.com/d (version )' 'https://example.com/d (version v1' 'https://example.com/d(version v1)'; do
+  ux specs/active/0050-ui.md Approved '- Flow: x' "- Design artifact: $bad"
+  doctor --strict; has "FAIL  design artifact not a fixed version" "malformed design artifact is a gate: $bad"
+done
+ux specs/active/0050-ui.md Approved 'none — no user interface'
+doctor;            hasnt "design artifact" "none — no user interface (after a multi-line comment) → no line"
+ux specs/active/0050-ui.md Draft '- Flow: x'
+doctor;            hasnt "UI spec has no design artifact" "a Draft UI spec without the field → no line"
+put specs/active/0050-ui.md '# Spec 0050' '- Status: Approved' '' '## Requirements' '1. x'
+doctor;            hasnt "design artifact" "no User experience heading (older spec) → no line"
+reset; ux specs/done/0050-ui.md Shipped '- Flow: x'
+doctor;            hasnt "design artifact" "specs/done/ is not scanned"
+reset; put specs/active/0051-mini.md '# Spec 0051' '- Status: Approved' '- Source: CR-1' '- Design: docs/x.png' '## Preserved behavior'
+doctor --strict;   has "FAIL  design artifact not a fixed version" "mini-spec Design: with a malformed value is a gate"
+put specs/active/0051-mini.md '# Spec 0051' '- Status: Approved' '- Source: CR-1' '- Design: <!-- UI change only -->' '## Preserved behavior'
+doctor;            hasnt "design artifact" "mini-spec with an empty Design: → no line"
+put specs/active/0051-mini.md '# Spec 0051' '- Status: Approved' '- Source: CR-1' '- Design: https://claude.ai/artifact/m1 (version 3)' '## Preserved behavior'
+doctor;            hasnt "not a fixed version" "mini-spec Design: with a fixed version → no line"
+
 # Criterion ↔ test map: every backticked name in an active plan must be held by a file outside
 # specs/ (path, basename or text); WARN only; shipped plans are not scanned.
 reset
