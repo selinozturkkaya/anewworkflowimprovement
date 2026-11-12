@@ -34,6 +34,51 @@ the core is Markdown plus a few POSIX scripts, so upgrades are file edits, not m
    ADRs are never renumbered.
 6. Write the new version into `.anew-version`.
 
+## v1.25.0 — UI work is drawn in ANALYZE and approved with the spec
+
+Current line (`main`), not LTS: a new rule. Teams adopting ANEW asked for design approval before
+ANALYZE ends — the revisit trigger ANEW-0008 named. ANEW-0013 records the decision. No invariant
+rule changes.
+
+- **Design artifact.** A spec whose "User experience" is not "none — no user interface" carries a
+  design artifact the Analyst draws in ANALYZE (or a link to an approved existing design): every
+  screen the criteria touch, in every listed state, each drawing labelled with its criterion. The
+  spec names it as `- Design artifact: <http(s) address> (version <id>)`; a mini-spec's
+  `- Design:` uses the same form. Spec approval covers the spec and that version together; a later
+  change to the artifact is a spec change (R-08). VERIFY compares screenshots with the drawing of
+  the same label. The core names no tool; the Claude Code adapter says how (Claude artifact).
+- **doctor checks the field** on Approved / In progress specs — a gate (WARN, FAIL under
+  `--strict`).
+
+### Upgrading
+
+- **Before you upgrade:** every Approved / In progress spec in `specs/active/` with a user
+  interface needs its `- Design artifact:` line (mini-spec: a filled `- Design:` in that form),
+  or `doctor --strict` turns CI red. Draft specs and `specs/done/` are not checked.
+- `scripts/doctor` — behavior list:
+  - for each `specs/active/[0-9]*.md` with `Status: Approved` or `In progress`: a mini-spec
+    (`## Preserved behavior`) with a non-empty `- Design:` (comments removed) is checked; a full
+    spec is checked unless the first non-comment line under `## User experience` starts with
+    `none — no user interface`; a spec without that heading is skipped;
+  - checked value must match `^https?://[^ ]+ \(version [^ )]+\)$` (trailing blanks trimmed, CR
+    ignored); no field → `UI spec has no design artifact: <path> …`; other value →
+    `design artifact not a fixed version (…): <path> — '<value>'`; both through the gate (WARN,
+    FAIL under `--strict`); `ok    design artifacts checked (<n>)`.
+
+  Selftest: new design-artifact scenarios; copy `scripts/selftest` with it.
+- `docs/decisions/anew/ANEW-0013-design-artifact-in-analyze.md`: new; take it as it is.
+  `ANEW-0008`: a `Revised:` line pointing to it.
+- `prompts/spec.md`, `prompts/clarify.md`: intent: UI work gets a design artifact drawn by the
+  Analyst (or a link to an approved design); "never invent visuals" is gone.
+- `specs/TEMPLATE.md`, `specs/TEMPLATE-mini.md`: intent: the `Design artifact` / `Design:` form.
+- `workflows/segments.md` (ANALYZE gate): intent: spec and artifact version approved together.
+- `prompts/verify.md`, `docs/testing.md` (Evidence for UI criteria): intent: screenshots against
+  the drawing with the same label; the live version must be the one the spec names.
+- `docs/commands.md` (doctor), `README.md` (enforcement table): intent: the new check.
+- `adapters/claude-code/CLAUDE.md` (and your installed `CLAUDE.md`): intent: the artifact is a
+  Claude artifact; share it before approval; never republish after approval.
+- Full diff: `/compare/v1.24.1...v1.25.0`.
+
 ## v1.24.1 — v1.24 is the first LTS line
 
 Organizations adopting ANEW need one version to train on and build on while new work continues.
